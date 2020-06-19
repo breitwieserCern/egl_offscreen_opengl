@@ -32,7 +32,7 @@
 /*
  * OpenCV for saving the render target as an image file.
  */
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
 
 /*
  * EGL headers.
@@ -68,6 +68,13 @@ void assertEGLError(const std::string& msg) {
 	}
 }
 
+#define PRINT_INFO(NAME)  \
+  { \
+    auto* info = eglQueryString(display, NAME); \
+    assertEGLError("eglQueryString"); \
+    std::cout << #NAME << "\n  " << info << std::endl << std::endl;  \
+  }
+
 int main() {
 	/*
 	 * EGL initialization and OpenGL context creation.
@@ -84,12 +91,17 @@ int main() {
 	eglInitialize(display, nullptr, nullptr);
 	assertEGLError("eglInitialize");
 
+  PRINT_INFO(EGL_VERSION)
+  PRINT_INFO(EGL_VENDOR)
+  PRINT_INFO(EGL_CLIENT_APIS)
+  PRINT_INFO(EGL_EXTENSIONS)
+
 	eglChooseConfig(display, nullptr, &config, 1, &num_config);
 	assertEGLError("eglChooseConfig");
-	
+  
+
 	eglBindAPI(EGL_OPENGL_API);
 	assertEGLError("eglBindAPI");
-	
 	context = eglCreateContext(display, config, EGL_NO_CONTEXT, NULL);
 	assertEGLError("eglCreateContext");
 
@@ -143,12 +155,12 @@ int main() {
 	/*
 	 * Read the framebuffer's color attachment and save it as a PNG file.
 	 */
-	cv::Mat image(500, 500, CV_8UC3);
-	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	glReadPixels(0, 0, 500, 500, GL_BGR, GL_UNSIGNED_BYTE, image.data);
-	assertOpenGLError("glReadPixels");
-
-	cv::imwrite("img.png", image);
+	// cv::Mat image(500, 500, CV_8UC3);
+	// glReadBuffer(GL_COLOR_ATTACHMENT0);
+	// glReadPixels(0, 0, 500, 500, GL_BGR, GL_UNSIGNED_BYTE, image.data);
+	// assertOpenGLError("glReadPixels");
+  // 
+	// cv::imwrite("img.png", image);
 	
 	
 	/*
